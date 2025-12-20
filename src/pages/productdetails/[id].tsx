@@ -1,8 +1,5 @@
-
-"use client";
-
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { CartContext } from "../../context/CartContext";
 
 interface ProductType {
@@ -19,24 +16,28 @@ interface ProductType {
 }
 
 export default function ProductDetails() {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const { id } = router.query;
   const [product, setProduct] = useState<ProductType | null>(null);
   const { addToCart } = useContext(CartContext);
-  const router = useRouter();
-
-  const loadProductById = async () => {
-    try {
-      const res = await fetch(`https://fakestoreapi.com/products/${id}`);
-      const data = await res.json();
-      setProduct(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   useEffect(() => {
-    if (id) loadProductById();
-  }, [id]);
+    if (!router.isReady || !id) return;
+
+    const loadProductById = async () => {
+      try {
+        const res = await fetch(
+          `https://fakestoreapi.com/products/${id}`
+        );
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    loadProductById();
+  }, [router.isReady, id]);
 
   if (!product) {
     return <h3 style={{ marginTop: "80px" }}>Loading product...</h3>;
@@ -51,7 +52,6 @@ export default function ProductDetails() {
     <div style={{ marginTop: "80px", backgroundColor: "white" }} className="container my-8">
       <div className="card p-4 shadow-sm">
         <div className="row g-4 align-items-center">
-
           <div className="col-md-5 text-center">
             <img
               src={product.image}
@@ -80,13 +80,9 @@ export default function ProductDetails() {
             <button onClick={handleAddToCart} className="btn btn-primary mt-auto w-50">
               Add to Cart
             </button>
-
           </div>
-
         </div>
       </div>
     </div>
   );
 }
-
-
