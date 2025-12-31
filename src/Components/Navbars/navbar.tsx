@@ -136,7 +136,7 @@ export default function Navbar() {
             style={{ position: "relative", left: "30px" }}
           />
           <Link
-            href="/seller"
+            href="/"
             style={{
               color: "black",
               textDecoration: "none",
