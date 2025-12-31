@@ -1,5 +1,4 @@
 
-'use client'; 
 
 import React from 'react';
 import styles from './navbar.module.css';
@@ -95,7 +94,7 @@ export default function Navbar() {
             style={{ position: "relative", left: "30px" }}
           />
           <Link
-            href="/login"
+            href="/"
             style={{
               color: "black",
               textDecoration: "none",
